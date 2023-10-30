@@ -1,9 +1,11 @@
-# node-leak-detector
+# leak-detector
 
 A memory/resource leak detector for Node.js applications.
 
 
 ## Usage
+
+The `leak-detector` tool can be used to find resource leaks within your Node.js application. Run your application, make HTTP requests while using a load balancer, and keep an eye on the results. Note that there will be some performance overhead so it may be safest to test in staging or while observing production for short periods of time.
 
 ### Basic Usage
 
