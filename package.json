@@ -1,0 +1,18 @@
+{
+  "name": "leak-detector",
+  "version": "0.0.1",
+  "description": "A memory/resource leak detector for Node.js applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thomas Hunter II <tlhunter@datadog.com>",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "dc-polyfill": "^0.1.2"
+  },
+  "devDependencies": {
+    "autocannon": "^7.12.0",
+    "express": "^4.18.2"
+  }
+}
