@@ -13,7 +13,7 @@ Here's a mostly code-free way to enable the leak detector:
 
 ```sh
 npm install leak-detector
-DISABLE_LD_REQUESTS=memory node -r leak-detector/auto myapp.js
+DISABLE_LD_MEMORY=true node -r leak-detector/auto myapp.js
 ```
 
 By default all of the leak detectors will be enabled when used in this manner.

@@ -26,5 +26,8 @@ module.exports.start = (config, handler) => {
 
 module.exports.finish = () => {
   clearInterval(interval);
-  enabled.requests.end(); // TODO: iterate each object property
+
+  if ('requests' in enabled) {
+    enabled.requests.end();
+  }
 };

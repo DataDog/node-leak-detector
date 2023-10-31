@@ -1,8 +1,16 @@
 const leakDetector = require('./index.js');
 
-const config = {
-  requests: true, // TODO: ENV VARS
+function disableFlagIsSet(name) {
+  if (name in process.env) {
+    return process.env[name] === 'true';
+  }
+
+  return false;
 }
+
+const config = {
+  requests: !disableFlagIsSet('DISABLE_LD_REQUESTS'),
+};
 
 /**
  * Iterate through each of the enabled detectors and print their status to STDERR in a sensible format.

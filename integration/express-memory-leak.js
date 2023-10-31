@@ -20,7 +20,7 @@ app.get('/', function (req, res) {
   res.send('hello world');
 });
 
-app.get('/gc', function (req, res) {
+app.get('/gc', function (_req, res) {
   gc();
   res.send('gc');
 });
