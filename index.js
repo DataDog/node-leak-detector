@@ -21,7 +21,7 @@ module.exports.start = (config, handler) => {
     }
 
     handler(statuses);
-  }, config.interval || 10_000).unref();
+  }, config.interval ? config.interval * 1000 : 10_000).unref();
 };
 
 module.exports.finish = () => {

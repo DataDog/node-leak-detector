@@ -30,18 +30,16 @@ const detector = require('leak-detector');
 const detectors = {
   interval: 10, // 10s interval by default
 
-  // list which detectors to enable
+  // specify which detectors to enable
   requests: true,
 };
 
 const handler = (detector, leaks) => {
-  // TODO: document the `leaks` variable
-  console.error(`LEAKS DETECTED (${detector}): ${leaks.count}`);
+  console.error(`LEAKS DETECTED (${detector}): `, leaks);
 };
 
 if (process.env.NODE_ENV === 'staging') {
   detector.start(detectors, handler);
-  // detector.finish();
 }
 ```
 
@@ -62,6 +60,20 @@ Currently we only support detection of one type of resource leak. We plan on add
 
 ### Incoming Requests Leak Detection
 
-This leak detector depends on the `FinalizationRegistry` feature of JavaScript. This is a tool that allows code to run when an object has been garbage collected but it comes with no guarantees that it will run when an object is collected. Indeed, with our testing, it appears to be about 99% accurate. So, if 1,000,000 incoming requests are allocated and garbage collected, there might only be 990,000 triggered cleanup events. For this reason it's not beneficial to look at the raw number but instead the percentage of overall incoming requests that have leaked. This value might change based on OS, architecture, and workload, so you may need to test this on your own infrastructure to find out.
+This leak detector depends on the `FinalizationRegistry` feature of JavaScript. This is a feature that allows code to run when an object has been garbage collected but it comes with no guarantees that it will run when an object is collected. So far in my testing it seems pretty stable, but YMMV.
 
-Chances are, an application is going to leak 100% of incoming requests or 0%. However, if there's something like an A/B test that runs on 33% of traffic, maybe the application would leak 33% or 67% of requests. If you have a code path that runs 1% of the time then it is likely indistinguishable from the margin of error. For testing purposes it's best to enable code paths 100% or 0% of the time to deterministically isolate a leak anyway.
+Chances are, an application is going to leak 100% of incoming requests or 0%. However, if there's something like an A/B test that runs on 33% of traffic, maybe the application would leak 33% or 67% of requests. If you have a code path that runs 1% of the time then it is likely indistinguishable from a margin of error. For testing purposes it's best to enable code paths 100% or 0% of the time to deterministically isolate a leak anyway.
+
+Here's what the handler payload looks like:
+
+```json
+{
+  "starts": 1000, // Number of incoming requests that have been recorded
+  "finishes": 999, // Number of incoming requests that have completed
+  "collections": 998 // Number of garbage collected incoming requests
+}
+```
+
+The `starts` and `finishes` values are transmitted by the `http` module itself and are very accurate. In this case there is a single open request that the application is still dealing with.
+
+The `collections` value is reported based on garbage collection events in the `FinalizationRegistry` and may have a margin of error. In this case the one active request hasn't been garbage collected yet since it's still in use. Another request also hasn't been garbage collected. It could be a leak, or it could get garbage collected if you were to manually call the `gc()` function (presuming `--enable-gc` is enabled).
