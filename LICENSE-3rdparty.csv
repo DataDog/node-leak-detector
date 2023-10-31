@@ -1,0 +1,4 @@
+Component,Origin,License,Copyright
+require,dc-polyfill,MIT,Copyright (c) 2023 Datadog, Inc.
+dev,autocannon,MIT,Copyright (c) 2016 Matteo Collina
+dev,express,MIT,Copyright (c) 2014-2015 Douglas Christopher Wilson <doug@somethingdoug.com>
