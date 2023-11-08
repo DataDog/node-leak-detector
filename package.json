@@ -1,6 +1,6 @@
 {
   "name": "leak-detector",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A memory/resource leak detector for Node.js applications",
   "main": "index.js",
   "scripts": {
