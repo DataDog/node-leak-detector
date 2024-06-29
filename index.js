@@ -25,7 +25,10 @@ module.exports.start = (config, handler) => {
 };
 
 module.exports.finish = () => {
-  clearInterval(interval);
+  if (interval) {
+    clearInterval(interval);
+    interval = null;
+  }
 
   if ('requests' in enabled) {
     enabled.requests.end();
